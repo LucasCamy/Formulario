@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/backend/" />
+  <Folder Name="/src/backend/src/" />
+  <Folder Name="/src/backend/src/BuildingBlocks/">
+    <Project Path="src/backend/src/BuildingBlocks/FormularioDinamico.BuildingBlocks/FormularioDinamico.BuildingBlocks.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/src/Modulos/" />
+  <Folder Name="/src/backend/src/Modulos/Formularios/">
+    <Project Path="src/backend/src/Modulos/Formularios/FormularioDinamico.Modulos.Formularios.Aplicacao/FormularioDinamico.Modulos.Formularios.Aplicacao.csproj" />
+    <Project Path="src/backend/src/Modulos/Formularios/FormularioDinamico.Modulos.Formularios.Dominio/FormularioDinamico.Modulos.Formularios.Dominio.csproj" />
+    <Project Path="src/backend/src/Modulos/Formularios/FormularioDinamico.Modulos.Formularios.Infraestrutura/FormularioDinamico.Modulos.Formularios.Infraestrutura.csproj" />
+  </Folder>
+  <Folder Name="/src/backend/src/WebApi/">
+    <Project Path="src/backend/src/WebApi/FormularioDinamico.Api/FormularioDinamico.Api.csproj" />
+  </Folder>
+</Solution>

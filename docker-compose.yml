@@ -1,0 +1,61 @@
+services:
+  db:
+    image: postgres:17.6-alpine
+    container_name: formulario-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-formulario_dinamico}
+      POSTGRES_USER: ${POSTGRES_USER:-formulario}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    ports:
+      - "32702:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-formulario} -d ${POSTGRES_DB:-formulario_dinamico}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: src/backend/Dockerfile
+    container_name: formulario-api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ASPNETCORE_URLS: http://+:8080
+      Cors__Origins: ${CORS_ORIGINS:-https://formulario.cloudlane.com.br}
+      Jwt__Secret: ${JWT_SECRET:?Set JWT_SECRET}
+      Jwt__Emissor: ${JWT_EMISSOR:-FormularioDinamico}
+      Jwt__Audiencia: ${JWT_AUDIENCIA:-FormularioDinamico}
+      Jwt__ExpiracaoHoras: ${JWT_EXPIRACAO_HORAS:-8}
+      ConnectionStrings__Principal: Host=db;Port=5432;Database=${POSTGRES_DB:-formulario_dinamico};Username=${POSTGRES_USER:-formulario};Password=${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    ports:
+      - "32701:8080"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: src/frontend/app/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-}
+    container_name: formulario-frontend
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "32700:80"
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

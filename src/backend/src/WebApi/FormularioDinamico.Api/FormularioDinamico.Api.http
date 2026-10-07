@@ -1,0 +1,6 @@
+@FormularioDinamico.Api_HostAddress = http://localhost:5080
+
+GET {{FormularioDinamico.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
